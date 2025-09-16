@@ -1,26 +1,12 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { FC } from "react";
+import { Layout } from "./components/Layout";
+import { Home } from "./pages";
 import "./App.css";
 
-function App() {
+export const App: FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Train Schedule
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Home />
+    </Layout>
   );
-}
-
-export default App;
+};
