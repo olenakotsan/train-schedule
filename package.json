@@ -1,5 +1,6 @@
 {
   "name": "train-schedule",
+  "homepage": "https://train-schedule-git-main-olenakotsans-projects.vercel.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
