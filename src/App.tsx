@@ -1,11 +1,12 @@
+import React, { FC } from "react";
+import { Layout } from "./components/Layout";
+import { Home } from "./pages";
 import "./App.css";
 
-function App() {
+export const App: FC = () => {
   return (
-    <div className="App">
-      <h1>Train Schedule</h1>
-    </div>
+    <Layout>
+      <Home />
+    </Layout>
   );
-}
-
-export default App;
+};
