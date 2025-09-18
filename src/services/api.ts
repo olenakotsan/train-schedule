@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "train-schedule.railway.internal"
+    ? "https://train-schedule.railway.internal"
     : "http://localhost:3001";
 
 export const api = axios.create({
