@@ -20,7 +20,9 @@ export const Header: FC = () => {
 
         {user && (
           <div className="flex items-center gap-4">
-            <span>Hello, {user.firstName || user.email}</span>
+            <span>
+              Hello, {user.firstName} {user.secondName}
+            </span>
             <Button variant="secondary" onClick={handleLogout}>
               Logout
             </Button>

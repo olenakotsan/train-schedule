@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { TrainsModule } from './trains/trains.module'; // Add this
+import { TrainsModule } from './trains/trains.module';
 import { User } from './entities/user.entity';
 import { Train } from './entities/train.entity';
 

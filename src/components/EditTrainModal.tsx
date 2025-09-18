@@ -107,13 +107,13 @@ export const EditTrainModal: FC<Props> = ({
           </div>
 
           <Input
-            label="Price ($)"
+            label="Price (₴)"
             type="number"
             name="price"
             value={formData.price}
             onChange={handleChange}
             min="0"
-            step="0.01"
+            step="1"
             required
           />
 

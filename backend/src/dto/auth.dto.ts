@@ -9,10 +9,10 @@ export class RegisterDto {
   password: string;
 
   @IsString()
-  firstName?: string;
+  firstName: string;
 
   @IsString()
-  lastName?: string;
+  lastName: string;
 }
 
 export class LoginDto {

@@ -1,15 +1,12 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { Train, CreateTrainRequest } from "../types/train";
+import { AddTrainModal } from "../components/AddTrainModal";
+import { EditTrainModal } from "../components/EditTrainModal";
+import { DeleteConfirmModal } from "../components/DeleteTrainModal";
+import { TrainTable } from "../components/TrainTable";
+import { Input, Alert, Button } from "../components/ui";
 import { useTrains } from "../hooks/useTrains";
-import {
-  AddTrainModal,
-  Alert,
-  Button,
-  DeleteConfirmModal,
-  EditTrainModal,
-  Input,
-  TrainTable,
-} from "../components";
+import { useDebounce } from "../hooks/useDebounce";
 
 export const Trains: FC = () => {
   const {
@@ -24,14 +21,32 @@ export const Trains: FC = () => {
   } = useTrains();
 
   const [search, setSearch] = useState("");
+  const [sortField, setSortField] = useState("departureTime");
+  const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("ASC");
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editTrain, setEditTrain] = useState<Train | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const handleSearch = () => {
-    loadTrains(search);
+  const debouncedSearch = useDebounce(search, 500);
+
+  useEffect(() => {
+    loadTrains(debouncedSearch, sortField, sortOrder);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch, sortField, sortOrder]);
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC");
+    } else {
+      setSortField(field);
+      setSortOrder("ASC");
+    }
+  };
+
+  const clearSearch = () => {
+    setSearch("");
   };
 
   const handleAddTrain = async (data: CreateTrainRequest) => {
@@ -40,7 +55,6 @@ export const Trains: FC = () => {
       await addTrain(data);
       setShowAddModal(false);
     } catch (err) {
-      // Error handled in hook
     } finally {
       setSubmitting(false);
     }
@@ -53,8 +67,8 @@ export const Trains: FC = () => {
       setSubmitting(true);
       await updateTrain(editTrain.id, data);
       setEditTrain(null);
+      setShowAddModal(false);
     } catch (err) {
-      // Error handled in hook
     } finally {
       setSubmitting(false);
     }
@@ -67,8 +81,8 @@ export const Trains: FC = () => {
       setDeleting(true);
       await deleteTrain(deleteId);
       setDeleteId(null);
+      setShowAddModal(false);
     } catch (err) {
-      // Error handled in hook
     } finally {
       setDeleting(false);
     }
@@ -81,17 +95,21 @@ export const Trains: FC = () => {
         <Button onClick={() => setShowAddModal(true)}>Add Train</Button>
       </div>
 
-      <div className="mb-6 flex gap-2">
+      <div className="mb-6 relative">
         <Input
           placeholder="Search trains..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-          className="flex-1"
+          className="pr-8"
         />
-        <Button variant="secondary" onClick={handleSearch}>
-          Search
-        </Button>
+        {search && (
+          <button
+            onClick={clearSearch}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       {error && <Alert variant="error" message={error} onClose={clearError} />}
@@ -100,6 +118,9 @@ export const Trains: FC = () => {
         trains={trains}
         onEdit={setEditTrain}
         onDelete={setDeleteId}
+        onSort={handleSort}
+        sortField={sortField}
+        sortOrder={sortOrder}
         loading={loading}
       />
 
