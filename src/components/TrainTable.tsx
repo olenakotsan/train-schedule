@@ -6,6 +6,9 @@ type Props = {
   trains: Train[];
   onEdit: (train: Train) => void;
   onDelete: (id: number) => void;
+  onSort: (field: string) => void;
+  sortField: string;
+  sortOrder: "ASC" | "DESC";
   loading?: boolean;
 };
 
@@ -13,6 +16,9 @@ export const TrainTable: FC<Props> = ({
   trains,
   onEdit,
   onDelete,
+  onSort,
+  sortField,
+  sortOrder,
   loading = false,
 }) => {
   if (loading) {
@@ -29,22 +35,40 @@ export const TrainTable: FC<Props> = ({
     );
   }
 
+  const getSortIcon = (field: string) => {
+    if (sortField !== field) return "↕";
+    return sortOrder === "ASC" ? "↑" : "↓";
+  };
+
+  const handleSort = (field: string) => {
+    onSort(field);
+  };
+
   return (
     <div className="bg-white border rounded">
       <table className="w-full">
         <thead className="bg-gray-50 border-b">
           <tr>
-            <th className="px-4 py-3 text-left font-medium text-gray-700">
-              Train
+            <th
+              className="px-4 py-3 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleSort("trainNumber")}
+            >
+              Train {getSortIcon("trainNumber")}
             </th>
             <th className="px-4 py-3 text-left font-medium text-gray-700">
               From - To
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-700">
-              Time
+            <th
+              className="px-4 py-3 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleSort("departureTime")}
+            >
+              Time {getSortIcon("departureTime")}
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-700">
-              Price
+            <th
+              className="px-4 py-3 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleSort("price")}
+            >
+              Price {getSortIcon("price")}
             </th>
             <th className="px-4 py-3 text-left font-medium text-gray-700">
               Actions
@@ -61,7 +85,7 @@ export const TrainTable: FC<Props> = ({
               <td className="px-4 py-3">
                 {train.departureTime} - {train.arrivalTime}
               </td>
-              <td className="px-4 py-3">${train.price}</td>
+              <td className="px-4 py-3">₴{train.price}</td>
               <td className="px-4 py-3">
                 <Button
                   variant="link"

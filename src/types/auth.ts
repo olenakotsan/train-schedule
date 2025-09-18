@@ -1,8 +1,8 @@
 export type User = {
   id: number;
   email: string;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
 };
 
 export type LoginRequest = {
@@ -13,8 +13,8 @@ export type LoginRequest = {
 export type RegisterRequest = {
   email: string;
   password: string;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
 };
 
 export type AuthResponse = {

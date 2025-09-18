@@ -8,14 +8,18 @@ export const useTrains = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const loadTrains = async (search?: string) => {
+  const loadTrains = async (
+    search?: string,
+    sortBy?: string,
+    sortOrder?: "ASC" | "DESC"
+  ) => {
     try {
       setLoading(true);
       setError("");
       const response = await trainService.getTrains({
         search: search || undefined,
-        sortBy: "departureTime",
-        sortOrder: "ASC",
+        sortBy: sortBy || "departureTime",
+        sortOrder: sortOrder || "ASC",
       });
       setTrains(response.data);
     } catch (err) {
