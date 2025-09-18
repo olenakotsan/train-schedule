@@ -85,7 +85,7 @@ export const TrainTable: FC<Props> = ({
               <td className="px-4 py-3">
                 {train.departureTime} - {train.arrivalTime}
               </td>
-              <td className="px-4 py-3">${train.price}</td>
+              <td className="px-4 py-3">₴{train.price}</td>
               <td className="px-4 py-3">
                 <Button
                   variant="link"
