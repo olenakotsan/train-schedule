@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../entities/user.entity';
 import { RegisterDto, LoginDto } from '../dto/auth.dto';
+import { ERROR_MESSAGES } from '../const';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new Error(ERROR_MESSAGES.USER_EXISTS);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -48,12 +49,12 @@ export class AuthService {
 
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new Error(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error('Invalid credentials');
+      throw new Error(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
 
     const payload = { email: user.email, sub: user.id };
