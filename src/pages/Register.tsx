@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { authService } from "../services/auth";
 import { RegisterRequest } from "../types/auth";
+import { Input, Button, Alert } from "../components/ui";
 
 export const Register: FC = () => {
   const [formData, setFormData] = useState<RegisterRequest>({
@@ -43,79 +44,47 @@ export const Register: FC = () => {
         </h2>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
+          <Alert variant="error" message={error} onClose={() => setError("")} />
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-train-dark mb-1">
-                First Name
-              </label>
-              <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-train-green focus:border-transparent"
-                placeholder="First name"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-train-dark mb-1">
-                Last Name
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-train-green focus:border-transparent"
-                placeholder="Last name"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-train-dark mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
+            <Input
+              label="First Name"
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-train-green focus:border-transparent"
-              placeholder="Enter your email"
+            />
+            <Input
+              label="Last Name"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-train-dark mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-train-green focus:border-transparent"
-              placeholder="Enter your password (min 6 characters)"
-            />
-          </div>
+          <Input
+            label="Email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-train-green text-white py-2 px-4 rounded-lg hover:bg-train-green-light focus:ring-2 focus:ring-train-green focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            minLength={6}
+          />
+
+          <Button type="submit" disabled={loading} className="w-full">
             {loading ? "Creating account..." : "Create Account"}
-          </button>
+          </Button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-4">

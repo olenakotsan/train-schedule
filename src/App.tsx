@@ -5,10 +5,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { Layout } from "./components/Layout";
-import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
+import { Layout } from "./components";
+import { Home, Login, Register, Trains } from "./pages";
 import { authService } from "./services/auth";
 import "./App.css";
 
@@ -20,14 +18,27 @@ export const App: FC = () => {
       <Routes>
         <Route
           path="/login"
-          element={!isAuthenticated ? <Login /> : <Navigate to="/" />}
+          element={!isAuthenticated ? <Login /> : <Navigate to="/trains" />}
         />
         <Route
           path="/register"
-          element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
+          element={!isAuthenticated ? <Register /> : <Navigate to="/trains" />}
         />
         <Route
-          path="/"
+          path="/trains"
+          element={
+            isAuthenticated ? (
+              <Layout>
+                <Trains />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route path="/" element={<Navigate to="/trains" />} />
+        <Route
+          path="/home"
           element={
             isAuthenticated ? (
               <Layout>
