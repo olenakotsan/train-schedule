@@ -1,7 +1,8 @@
 import React, { FC, useState } from "react";
 import { authService } from "../services/auth";
 import { LoginRequest } from "../types/auth";
-import { Input, Button, Alert } from "../components/ui";
+import { Input, Button, Alert } from "../components";
+import { ERROR_MESSAGES } from "../const";
 
 export const Login: FC = () => {
   const [formData, setFormData] = useState<LoginRequest>({
@@ -28,7 +29,7 @@ export const Login: FC = () => {
       authService.setAuth(response);
       window.location.href = "/";
     } catch (err) {
-      setError("Invalid email or password");
+      setError(ERROR_MESSAGES.LOGIN_FAILED);
     } finally {
       setLoading(false);
     }

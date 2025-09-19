@@ -20,7 +20,7 @@ export class TrainsService {
     page: number = 1,
     limit: number = 10,
     search?: string,
-    sortBy: string = 'departureTime',
+    sortBy: string = 'departure',
     sortOrder: 'ASC' | 'DESC' = 'ASC',
   ): Promise<{
     data: Train[];

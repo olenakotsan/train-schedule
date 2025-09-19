@@ -14,3 +14,9 @@ export const ERROR_MESSAGES = {
   TRAIN_UPDATE_FAILED: "Failed to update train",
   TRAIN_DELETE_FAILED: "Failed to delete train",
 } as const;
+
+export const SUCCESS_MESSAGES = {
+  TRAIN_ADDED: "Train added successfully",
+  TRAIN_UPDATED: "Train updated successfully",
+  TRAIN_DELETED: "Train deleted  successfully",
+} as const;

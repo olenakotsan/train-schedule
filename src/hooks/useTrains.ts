@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Train, CreateTrainRequest } from "../types/train";
 import { trainService } from "../services/train";
-import { ERROR_MESSAGES } from "../const";
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../const";
 import { useToast } from "../contexts/ToastContext";
 
 export const useTrains = () => {
@@ -25,7 +25,7 @@ export const useTrains = () => {
       setLoading(true);
       const response = await trainService.getTrains({
         search: search || undefined,
-        sortBy: sortBy || "departureTime",
+        sortBy: sortBy || "departure",
         sortOrder: sortOrder || "ASC",
         page: page || pagination.page,
         limit: pagination.limit,
@@ -51,7 +51,7 @@ export const useTrains = () => {
   const addTrain = async (data: CreateTrainRequest) => {
     try {
       await trainService.createTrain(data);
-      showToast("Train added successfully", "success");
+      showToast(SUCCESS_MESSAGES.TRAIN_ADDED, "success");
       await loadTrains();
     } catch (err) {
       showToast(ERROR_MESSAGES.TRAIN_ADD_FAILED, "error");
@@ -62,7 +62,7 @@ export const useTrains = () => {
   const updateTrain = async (id: number, data: CreateTrainRequest) => {
     try {
       await trainService.updateTrain(id, data);
-      showToast("Train updated successfully", "success");
+      showToast(SUCCESS_MESSAGES.TRAIN_UPDATED, "success");
       await loadTrains();
     } catch (err) {
       showToast(ERROR_MESSAGES.TRAIN_UPDATE_FAILED, "error");
@@ -79,7 +79,7 @@ export const useTrains = () => {
       );
       await loadTrains();
     } catch (err) {
-      showToast("Failed to update train status", "error");
+      showToast(ERROR_MESSAGES.TRAIN_UPDATE_FAILED, "error");
       throw err;
     }
   };
@@ -87,7 +87,7 @@ export const useTrains = () => {
   const deleteTrain = async (id: number) => {
     try {
       await trainService.deleteTrain(id);
-      showToast("Train deleted successfully", "success");
+      showToast(SUCCESS_MESSAGES.TRAIN_DELETED, "success");
       await loadTrains();
     } catch (err) {
       showToast(ERROR_MESSAGES.TRAIN_DELETE_FAILED, "error");

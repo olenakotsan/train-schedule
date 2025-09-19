@@ -1,13 +1,16 @@
 import React, { FC, useState, useEffect } from "react";
 import { Train, CreateTrainRequest } from "../types/train";
-import { AddTrainModal } from "../components/AddTrainModal";
-import { EditTrainModal } from "../components/EditTrainModal";
-import { DeleteConfirmModal } from "../components/DeleteConfirmModal";
-import { TrainTable } from "../components/TrainTable";
-import { Pagination } from "../components/Pagination";
-import { Input, Button } from "../components/ui";
 import { useTrains } from "../hooks/useTrains";
 import { useDebounce } from "../hooks/useDebounce";
+import {
+  AddTrainModal,
+  Button,
+  DeleteConfirmModal,
+  EditTrainModal,
+  Input,
+  Pagination,
+  TrainTable,
+} from "../components";
 
 export const Trains: FC = () => {
   const {
@@ -23,7 +26,7 @@ export const Trains: FC = () => {
   } = useTrains();
 
   const [search, setSearch] = useState("");
-  const [sortField, setSortField] = useState("departureTime");
+  const [sortField, setSortField] = useState("departure");
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("ASC");
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -62,7 +65,6 @@ export const Trains: FC = () => {
       await addTrain(data);
       setShowAddModal(false);
     } catch (err) {
-      // Error handled in hook with toast
     } finally {
       setSubmitting(false);
     }
@@ -76,7 +78,6 @@ export const Trains: FC = () => {
       await updateTrain(editTrain.id, data);
       setEditTrain(null);
     } catch (err) {
-      // Error handled in hook with toast
     } finally {
       setSubmitting(false);
     }
@@ -85,9 +86,7 @@ export const Trains: FC = () => {
   const handleToggleStatus = async (id: number, isActive: boolean) => {
     try {
       await toggleTrainStatus(id, isActive);
-    } catch (err) {
-      // Error handled in hook with toast
-    }
+    } catch (err) {}
   };
 
   const handleDeleteTrain = async () => {
@@ -98,7 +97,6 @@ export const Trains: FC = () => {
       await deleteTrain(deleteId);
       setDeleteId(null);
     } catch (err) {
-      // Error handled in hook with toast
     } finally {
       setDeleting(false);
     }

@@ -57,8 +57,11 @@ export const TrainTable: FC<Props> = ({
             >
               Train {getSortIcon("trainNumber")}
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-700">
-              From - To
+            <th
+              className="px-4 py-3 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleSort("departure")}
+            >
+              From - To {getSortIcon("departure")}
             </th>
             <th
               className="px-4 py-3 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100"
@@ -95,7 +98,7 @@ export const TrainTable: FC<Props> = ({
               <td className="px-4 py-3">
                 {train.departureTime} - {train.arrivalTime}
               </td>
-              <td className="px-4 py-3">${train.price}</td>
+              <td className="px-4 py-3">₴{train.price}</td>
               <td className="px-4 py-3">
                 <span
                   className={`px-2 py-1 rounded text-xs ${

@@ -4,12 +4,18 @@ import { API_ENDPOINTS } from "../const";
 
 export const authService = {
   async login(data: LoginRequest): Promise<AuthResponse> {
-    const response = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.LOGIN, data);
+    const response = await api.post<AuthResponse>(
+      API_ENDPOINTS.AUTH.LOGIN,
+      data
+    );
     return response.data;
   },
 
   async register(data: RegisterRequest): Promise<AuthResponse> {
-    const response = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, data);
+    const response = await api.post<AuthResponse>(
+      API_ENDPOINTS.AUTH.REGISTER,
+      data
+    );
     return response.data;
   },
 

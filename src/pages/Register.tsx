@@ -1,7 +1,8 @@
 import React, { FC, useState } from "react";
 import { authService } from "../services/auth";
 import { RegisterRequest } from "../types/auth";
-import { Input, Button, Alert } from "../components/ui";
+import { Input, Button, Alert } from "../components";
+import { ERROR_MESSAGES } from "../const";
 
 export const Register: FC = () => {
   const [formData, setFormData] = useState<RegisterRequest>({
@@ -30,7 +31,7 @@ export const Register: FC = () => {
       authService.setAuth(response);
       window.location.href = "/";
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setError(ERROR_MESSAGES.REGISTER_FAILED);
     } finally {
       setLoading(false);
     }

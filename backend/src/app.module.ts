@@ -17,10 +17,11 @@ import { Train } from './entities/train.entity';
       type: 'postgres',
       url: process.env.DATABASE_URL,
       entities: [User, Train],
-      synchronize: true,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      synchronize: false,
+      ssl:
+        process.env.NODE_ENV === 'production'
+          ? { rejectUnauthorized: false }
+          : false,
     }),
     AuthModule,
     TrainsModule,

@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { TrainsService } from './trains.service';
 import { CreateTrainDto, UpdateTrainDto } from '../dto/train.dto';
+import { SUCCESS_MESSAGES } from 'src/const';
 
 @Controller('trains')
 export class TrainsController {
@@ -76,6 +77,6 @@ export class TrainsController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     await this.trainsService.delete(+id);
-    return { message: 'Train deleted successfully' };
+    return { message: SUCCESS_MESSAGES.TRAIN_DELETED };
   }
 }
