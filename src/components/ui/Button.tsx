@@ -1,6 +1,12 @@
 import React, { FC } from "react";
 
-type Variant = "primary" | "secondary" | "danger" | "link" | "link-danger";
+type Variant =
+  | "primary-green"
+  | "primary-brown"
+  | "secondary"
+  | "danger"
+  | "link"
+  | "link-danger";
 
 type Props = {
   variant?: Variant;
@@ -12,8 +18,10 @@ const getVariantClasses = (variant: Variant): string => {
     "px-4 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
 
   switch (variant) {
-    case "primary":
+    case "primary-green":
       return `${base} bg-train-green text-white hover:bg-opacity-90`;
+    case "primary-brown":
+      return `${base} bg-train-brown text-white hover:bg-opacity-90`;
     case "secondary":
       return `${base} border hover:bg-gray-50`;
     case "danger":
@@ -26,7 +34,7 @@ const getVariantClasses = (variant: Variant): string => {
 };
 
 export const Button: FC<Props> = ({
-  variant = "primary",
+  variant = "primary-green",
   children,
   className = "",
   ...props

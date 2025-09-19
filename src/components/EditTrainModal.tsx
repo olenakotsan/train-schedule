@@ -5,7 +5,7 @@ import { Input, Button } from "./ui";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Partial<CreateTrainRequest>) => void;
+  onSubmit: (data: CreateTrainRequest) => void;
   train: Train | null;
   loading?: boolean;
 };
@@ -51,7 +51,15 @@ export const EditTrainModal: FC<Props> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    const dataToSubmit = {
+      ...formData,
+      price:
+        typeof formData.price === "string"
+          ? parseFloat(formData.price)
+          : formData.price,
+    };
+    onSubmit(dataToSubmit);
   };
 
   if (!isOpen || !train) return null;
@@ -113,7 +121,7 @@ export const EditTrainModal: FC<Props> = ({
             value={formData.price}
             onChange={handleChange}
             min="0"
-            step="1"
+            step="0.01"
             required
           />
 

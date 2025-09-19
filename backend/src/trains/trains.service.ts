@@ -22,7 +22,13 @@ export class TrainsService {
     search?: string,
     sortBy: string = 'departureTime',
     sortOrder: 'ASC' | 'DESC' = 'ASC',
-  ): Promise<{ data: Train[]; total: number; page: number; limit: number }> {
+  ): Promise<{
+    data: Train[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
     const query = this.trainRepository.createQueryBuilder('train');
 
     if (search) {
@@ -32,32 +38,37 @@ export class TrainsService {
       );
     }
 
-    query.andWhere('train.isActive = :isActive', { isActive: true });
+    query.orderBy('train.isActive', 'DESC');
 
-    query.orderBy(`train.${sortBy}`, sortOrder);
+    query.addOrderBy(`train.${sortBy}`, sortOrder);
 
     const offset = (page - 1) * limit;
     query.skip(offset).take(limit);
 
     const [data, total] = await query.getManyAndCount();
+    const totalPages = Math.ceil(total / limit);
 
-    return { data, total, page, limit };
+    return { data, total, page, limit, totalPages };
   }
 
   async findOne(id: number): Promise<Train> {
     return await this.trainRepository.findOne({ where: { id } });
   }
 
-  async update(id: number, updateTrainDto: UpdateTrainDto): Promise<Train> {
+  async update(id: number, createTrainDto: CreateTrainDto): Promise<Train> {
+    await this.trainRepository.update(id, createTrainDto);
+    return await this.findOne(id);
+  }
+
+  async partialUpdate(
+    id: number,
+    updateTrainDto: UpdateTrainDto,
+  ): Promise<Train> {
     await this.trainRepository.update(id, updateTrainDto);
     return await this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.trainRepository.update(id, { isActive: false });
-  }
-
-  async hardDelete(id: number): Promise<void> {
+  async delete(id: number): Promise<void> {
     await this.trainRepository.delete(id);
   }
 }

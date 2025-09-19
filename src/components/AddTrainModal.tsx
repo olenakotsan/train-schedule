@@ -99,7 +99,7 @@ export const AddTrainModal: FC<Props> = ({
             value={formData.price}
             onChange={handleChange}
             min="0"
-            step="1"
+            step="0.01"
             required
           />
 
