@@ -6,6 +6,7 @@ type Props = {
   trains: Train[];
   onEdit: (train: Train) => void;
   onDelete: (id: number) => void;
+  onToggleStatus: (id: number, isActive: boolean) => void;
   onSort: (field: string) => void;
   sortField: string;
   sortOrder: "ASC" | "DESC";
@@ -16,6 +17,7 @@ export const TrainTable: FC<Props> = ({
   trains,
   onEdit,
   onDelete,
+  onToggleStatus,
   onSort,
   sortField,
   sortOrder,
@@ -36,7 +38,7 @@ export const TrainTable: FC<Props> = ({
   }
 
   const getSortIcon = (field: string) => {
-    if (sortField !== field) return "↕";
+    if (sortField !== field) return "↕️";
     return sortOrder === "ASC" ? "↑" : "↓";
   };
 
@@ -71,13 +73,21 @@ export const TrainTable: FC<Props> = ({
               Price {getSortIcon("price")}
             </th>
             <th className="px-4 py-3 text-left font-medium text-gray-700">
+              Status
+            </th>
+            <th className="px-4 py-3 text-left font-medium text-gray-700">
               Actions
             </th>
           </tr>
         </thead>
         <tbody>
           {trains.map((train) => (
-            <tr key={train.id} className="border-b hover:bg-gray-50">
+            <tr
+              key={train.id}
+              className={`border-b hover:bg-gray-50 ${
+                !train.isActive ? "bg-gray-100 text-gray-500" : ""
+              }`}
+            >
               <td className="px-4 py-3 font-medium">{train.trainNumber}</td>
               <td className="px-4 py-3">
                 {train.departure} - {train.arrival}
@@ -85,14 +95,37 @@ export const TrainTable: FC<Props> = ({
               <td className="px-4 py-3">
                 {train.departureTime} - {train.arrivalTime}
               </td>
-              <td className="px-4 py-3">₴{train.price}</td>
+              <td className="px-4 py-3">${train.price}</td>
               <td className="px-4 py-3">
+                <span
+                  className={`px-2 py-1 rounded text-xs ${
+                    train.isActive
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {train.isActive ? "Active" : "Inactive"}
+                </span>
+              </td>
+              <td className="px-4 py-3 flex gap-2">
                 <Button
                   variant="link"
                   onClick={() => onEdit(train)}
-                  className="mr-3"
+                  disabled={!train.isActive}
+                  className="mr-2"
                 >
                   Edit
+                </Button>
+                <Button
+                  variant="link"
+                  onClick={() => onToggleStatus(train.id, !train.isActive)}
+                  className={
+                    train.isActive
+                      ? "text-orange-600 hover:text-orange-800"
+                      : "text-green-600 hover:text-green-800"
+                  }
+                >
+                  {train.isActive ? "Deactivate" : "Activate"}
                 </Button>
                 <Button
                   variant="link-danger"

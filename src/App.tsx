@@ -5,51 +5,48 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { Layout } from "./components";
-import { Home, Login, Register, Trains } from "./pages";
+import { Layout } from "./components/Layout";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
+import { Trains } from "./pages/Trains";
 import { authService } from "./services/auth";
+import { ToastProvider } from "./contexts/ToastContext";
 import "./App.css";
 
 export const App: FC = () => {
   const isAuthenticated = authService.isAuthenticated();
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/login"
-          element={!isAuthenticated ? <Login /> : <Navigate to="/trains" />}
-        />
-        <Route
-          path="/register"
-          element={!isAuthenticated ? <Register /> : <Navigate to="/trains" />}
-        />
-        <Route
-          path="/trains"
-          element={
-            isAuthenticated ? (
-              <Layout>
-                <Trains />
-              </Layout>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route path="/" element={<Navigate to="/trains" />} />
-        <Route
-          path="/home"
-          element={
-            isAuthenticated ? (
-              <Layout>
-                <Home />
-              </Layout>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-      </Routes>
-    </Router>
+    <ToastProvider>
+      <Router>
+        <Routes>
+          <Route
+            path="/login"
+            element={!isAuthenticated ? <Login /> : <Navigate to="/trains" />}
+          />
+          <Route
+            path="/register"
+            element={
+              !isAuthenticated ? <Register /> : <Navigate to="/trains" />
+            }
+          />
+
+          <Route
+            path="/trains"
+            element={
+              isAuthenticated ? (
+                <Layout>
+                  <Trains />
+                </Layout>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          <Route path="/" element={<Navigate to="/trains" />} />
+        </Routes>
+      </Router>
+    </ToastProvider>
   );
 };

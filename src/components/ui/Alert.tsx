@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 
 type Variant = "error" | "success";
 
@@ -6,6 +6,8 @@ type Props = {
   variant?: Variant;
   message: string;
   onClose?: () => void;
+  autoClose?: boolean;
+  duration?: number;
 };
 
 const getVariantClasses = (variant: Variant): string => {
@@ -17,22 +19,40 @@ const getVariantClasses = (variant: Variant): string => {
   }
 };
 
-export const Alert: FC<Props> = ({ variant = "error", message, onClose }) => {
+export const Alert: FC<Props> = ({
+  variant = "error",
+  message,
+  onClose,
+  autoClose = true,
+  duration = 5000,
+}) => {
+  useEffect(() => {
+    if (autoClose && onClose) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, duration);
+
+      return () => clearTimeout(timer);
+    }
+  }, [autoClose, onClose, duration]);
+
   return (
-    <div
-      className={`border px-4 py-3 rounded mb-4 flex justify-between items-center ${getVariantClasses(
-        variant
-      )}`}
-    >
-      <span>{message}</span>
-      {onClose && (
-        <button
-          onClick={onClose}
-          className="hover:opacity-75 ml-4 text-lg font-bold"
-        >
-          ×
-        </button>
-      )}
+    <div className="fixed top-8 right-6 transform z-50 max-w-md w-full mx-4">
+      <div
+        className={`border px-4 py-3 rounded-lg shadow-lg flex justify-between items-center ${getVariantClasses(
+          variant
+        )}`}
+      >
+        <span>{message}</span>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="hover:opacity-75 ml-4 text-lg font-bold"
+          >
+            ×
+          </button>
+        )}
+      </div>
     </div>
   );
 };

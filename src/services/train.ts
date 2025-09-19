@@ -21,11 +21,16 @@ export const trainService = {
     return response.data;
   },
 
-  async updateTrain(
-    id: number,
-    data: Partial<CreateTrainRequest>
-  ): Promise<Train> {
+  async updateTrain(id: number, data: CreateTrainRequest): Promise<Train> {
     const response = await api.put<Train>(
+      `${API_ENDPOINTS.TRAINS}/${id}`,
+      data
+    );
+    return response.data;
+  },
+
+  async patchTrain(id: number, data: Partial<Train>): Promise<Train> {
+    const response = await api.patch<Train>(
       `${API_ENDPOINTS.TRAINS}/${id}`,
       data
     );

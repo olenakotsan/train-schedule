@@ -60,9 +60,9 @@ export class TrainsController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body(ValidationPipe) updateTrainDto: UpdateTrainDto,
+    @Body(ValidationPipe) createTrainDto: CreateTrainDto,
   ) {
-    return await this.trainsService.update(+id, updateTrainDto);
+    return await this.trainsService.update(+id, createTrainDto);
   }
 
   @Patch(':id')
@@ -70,12 +70,12 @@ export class TrainsController {
     @Param('id') id: string,
     @Body(ValidationPipe) updateTrainDto: UpdateTrainDto,
   ) {
-    return await this.trainsService.update(+id, updateTrainDto);
+    return await this.trainsService.partialUpdate(+id, updateTrainDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    await this.trainsService.remove(+id);
-    return { message: 'Train deactivated successfully' };
+    await this.trainsService.delete(+id);
+    return { message: 'Train deleted successfully' };
   }
 }

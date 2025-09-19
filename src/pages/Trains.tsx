@@ -2,9 +2,10 @@ import React, { FC, useState, useEffect } from "react";
 import { Train, CreateTrainRequest } from "../types/train";
 import { AddTrainModal } from "../components/AddTrainModal";
 import { EditTrainModal } from "../components/EditTrainModal";
-import { DeleteConfirmModal } from "../components/DeleteTrainModal";
+import { DeleteConfirmModal } from "../components/DeleteConfirmModal";
 import { TrainTable } from "../components/TrainTable";
-import { Input, Alert, Button } from "../components/ui";
+import { Pagination } from "../components/Pagination";
+import { Input, Button } from "../components/ui";
 import { useTrains } from "../hooks/useTrains";
 import { useDebounce } from "../hooks/useDebounce";
 
@@ -12,12 +13,13 @@ export const Trains: FC = () => {
   const {
     trains,
     loading,
-    error,
+    pagination,
     loadTrains,
+    changePage,
     addTrain,
     updateTrain,
+    toggleTrainStatus,
     deleteTrain,
-    clearError,
   } = useTrains();
 
   const [search, setSearch] = useState("");
@@ -32,9 +34,14 @@ export const Trains: FC = () => {
   const debouncedSearch = useDebounce(search, 500);
 
   useEffect(() => {
-    loadTrains(debouncedSearch, sortField, sortOrder);
+    changePage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch, sortField, sortOrder]);
+
+  useEffect(() => {
+    loadTrains(debouncedSearch, sortField, sortOrder, pagination.page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.page, debouncedSearch, sortField, sortOrder]);
 
   const handleSort = (field: string) => {
     if (sortField === field) {
@@ -55,22 +62,31 @@ export const Trains: FC = () => {
       await addTrain(data);
       setShowAddModal(false);
     } catch (err) {
+      // Error handled in hook with toast
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleEditTrain = async (data: Partial<CreateTrainRequest>) => {
+  const handleEditTrain = async (data: CreateTrainRequest) => {
     if (!editTrain) return;
 
     try {
       setSubmitting(true);
       await updateTrain(editTrain.id, data);
       setEditTrain(null);
-      setShowAddModal(false);
     } catch (err) {
+      // Error handled in hook with toast
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleToggleStatus = async (id: number, isActive: boolean) => {
+    try {
+      await toggleTrainStatus(id, isActive);
+    } catch (err) {
+      // Error handled in hook with toast
     }
   };
 
@@ -81,8 +97,8 @@ export const Trains: FC = () => {
       setDeleting(true);
       await deleteTrain(deleteId);
       setDeleteId(null);
-      setShowAddModal(false);
     } catch (err) {
+      // Error handled in hook with toast
     } finally {
       setDeleting(false);
     }
@@ -112,16 +128,21 @@ export const Trains: FC = () => {
         )}
       </div>
 
-      {error && <Alert variant="error" message={error} onClose={clearError} />}
-
       <TrainTable
         trains={trains}
         onEdit={setEditTrain}
         onDelete={setDeleteId}
+        onToggleStatus={handleToggleStatus}
         onSort={handleSort}
         sortField={sortField}
         sortOrder={sortOrder}
         loading={loading}
+      />
+
+      <Pagination
+        currentPage={pagination.page}
+        totalPages={pagination.totalPages}
+        onPageChange={changePage}
       />
 
       <AddTrainModal
